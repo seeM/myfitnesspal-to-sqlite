@@ -1,0 +1,68 @@
+{
+  "date": "2021-07-08",
+  "complete": true,
+  "water": 750.0,
+  "notes": "",
+  "meals": {
+    "snacks": [
+      {
+        "short_name": "Cadbury's - Chocolate",
+        "quantity": 1.0,
+        "unit": "square",
+        "nutrition_information": {
+          "calories": 120.0,
+          "carbohydrates": 13.0,
+          "fat": 7.0,
+          "protein": 1.0,
+          "sodium": 27.0,
+          "sugar": 13.0
+        }
+      },
+      {
+        "name": "Cadbury's - Chocolate, 1 square",
+        "quantity": 1.0,
+        "unit": "square",
+        "nutrition_information": {
+          "calories": 120.0,
+          "carbohydrates": 13.0,
+          "fat": 7.0,
+          "protein": 1.0,
+          "sodium": 27.0,
+          "sugar": 13.0
+        }
+      },
+      {
+        "short_name": "Cadbury's - Chocolate - Coconut",
+        "quantity": 1.0,
+        "unit": "square",
+        "nutrition_information": {
+          "calories": 120.0,
+          "carbohydrates": 13.0,
+          "fat": 7.0,
+          "protein": 1.0,
+          "sodium": 27.0,
+          "sugar": 13.0
+        }
+      }
+    ]
+  },
+  "exercises": {
+    "cardiovascular": [
+      {
+        "name": "Rock climbing, ascending rock",
+        "nutrition_information": {
+          "minutes": 30.0,
+          "calories_burned": 424.0
+        }
+      }
+    ]
+  },
+  "goals": {
+    "calories": 2014.0,
+    "carbohydrates": 252.0,
+    "fat": 67.0,
+    "protein": 101.0,
+    "sodium": 2300.0,
+    "sugar": 76.0
+  }
+}
