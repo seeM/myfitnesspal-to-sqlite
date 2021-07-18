@@ -129,7 +129,8 @@ def fetch_diary_entry(date, client, measurements):
     raw_measurements = {}
     for m in measurements:
         measurement_entry = client.get_measurements(m, date, date)
-        raw_measurements[m] = measurement_entry[date]
+        if date in measurement_entry:
+            raw_measurements[m] = measurement_entry[date]
 
     meals = {
         meal.name: [
