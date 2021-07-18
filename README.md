@@ -27,17 +27,11 @@ Store your MyFitnessPal password in the system keyring:
 
 Note that all commands assume that your password is stored in the system keyring.
 
-## Fetching food, exercise, and goal diary entries for a user
+## Fetching diary entries
 
-The `diary` command retrieves food, exercise, and goal diary entries for a given user and date.
+The `diary` command retrieves food, exercise, goal and measurement entries for a given user and date.
 
     $ myfitnesspal-to-sqlite diary myfitnesspal.db my_user 2021-07-14
-
-## Fetching measurements for a user
-
-The `measurements` command fetches a given measurement's values between two dates (inclusive).
-
-    $ myfitnesspal-to-sqlite measurements myfitnesspal.db my_user Weight 2021-07-14 2021-07-21
 
 ## Development
 
