@@ -41,3 +41,4 @@ def diary(db_path, user, date, measurement):
     diary_entry = utils.fetch_diary_entry(date, client, measurement)
 
     utils.save_diary_entry(db, diary_entry)
+    utils.ensure_db_shape(db)

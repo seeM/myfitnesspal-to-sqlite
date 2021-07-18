@@ -15,6 +15,7 @@ def diary_entry():
 def db(diary_entry):
     db = sqlite_utils.Database(memory=True)
     utils.save_diary_entry(db, diary_entry)
+    utils.ensure_db_shape(db)
     return db
 
 
@@ -25,7 +26,7 @@ def test_tables(db):
         "exercise_entry_items",
         "measurement_entry_items",
         "goals",
-    } == set(db.table_names())
+    }.issubset(db.table_names())
     assert {
         ForeignKey(
             table="food_entry_items",
@@ -141,16 +142,16 @@ def test_exercise_entry_items(db):
 def test_goals(db):
     goal_rows = list(db["goals"].rows)
     assert [
-            {
-                "id": 1,
-                "diary_entry": 1,
-                "calories": 2014.0,
-                "carbohydrates": 252.0,
-                "fat": 67.0,
-                "protein": 101.0,
-                "sodium": 2300.0,
-                "sugar": 76.0,
-            }
+        {
+            "id": 1,
+            "diary_entry": 1,
+            "calories": 2014.0,
+            "carbohydrates": 252.0,
+            "fat": 67.0,
+            "protein": 101.0,
+            "sodium": 2300.0,
+            "sugar": 76.0,
+        }
     ] == goal_rows
 
 
@@ -159,3 +160,55 @@ def test_measurement_entry_items(db):
     assert [
         {"id": 1, "diary_entry": 1, "name": "Weight", "value": 77.3},
     ] == measurement_entry_item_rows
+
+
+def test_daily_view(db):
+    assert "daily" in db.view_names()
+    rows = list(db["daily"].rows)
+    assert [
+        {
+            "date": "2021-07-08",
+            "complete": 1,
+            "water": 750.0,
+            "notes": "",
+            "breakfast_calories": None,
+            "breakfast_carbohydrates": None,
+            "breakfast_fat": None,
+            "breakfast_protein": None,
+            "breakfast_sodium": None,
+            "breakfast_sugar": None,
+            "lunch_calories": None,
+            "lunch_carbohydrates": None,
+            "lunch_fat": None,
+            "lunch_protein": None,
+            "lunch_sodium": None,
+            "lunch_sugar": None,
+            "dinner_calories": None,
+            "dinner_carbohydrates": None,
+            "dinner_fat": None,
+            "dinner_protein": None,
+            "dinner_sodium": None,
+            "dinner_sugar": None,
+            "snacks_calories": 360.0,
+            "snacks_carbohydrates": 39.0,
+            "snacks_fat": 21.0,
+            "snacks_protein": 3.0,
+            "snacks_sodium": 81.0,
+            "snacks_sugar": 39.0,
+            "total_calories": 360.0,
+            "total_carbohydrates": 39.0,
+            "total_fat": 21.0,
+            "total_protein": 3.0,
+            "total_sodium": 81.0,
+            "total_sugar": 39.0,
+            "goal_calories": 2014.0,
+            "goal_carbohydrates": 252.0,
+            "goal_fat": 67.0,
+            "goal_protein": 101.0,
+            "goal_sodium": 2300.0,
+            "goal_sugar": 76.0,
+            "weight": 77.3,
+            "total_exercise_minutes": 30.0,
+            "total_calories_burned": 424.0,
+        }
+    ] == rows
