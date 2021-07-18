@@ -125,7 +125,7 @@ def save_diary_entry(db, diary_entry):
                 foreign_keys=[("diary_entry", "diary_entries")],
             )
 
-    nutrition_information = {f"goal_{k}": v for k, v in original["goals"].items()}
+    nutrition_information = {k: v for k, v in original["goals"].items()}
     goals = {"diary_entry": diary_entry_id, **nutrition_information}
     db["goals"].insert(
         goals,

@@ -135,11 +135,11 @@ def test_goals(db):
             {
                 "id": 1,
                 "diary_entry": 1,
-                "goal_calories": 2014.0,
-                "goal_carbohydrates": 252.0,
-                "goal_fat": 67.0,
-                "goal_protein": 101.0,
-                "goal_sodium": 2300.0,
-                "goal_sugar": 76.0,
+                "calories": 2014.0,
+                "carbohydrates": 252.0,
+                "fat": 67.0,
+                "protein": 101.0,
+                "sodium": 2300.0,
+                "sugar": 76.0,
             }
     ] == goal_rows
