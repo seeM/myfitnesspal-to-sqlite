@@ -1,5 +1,10 @@
-def fetch_diary_entry(date, client):
+def fetch_diary_entry(date, client, measurements):
     raw = client.get_date(date)
+    raw_measurements = {}
+    for m in measurements:
+        measurement_entry = client.get_measurements(m, date, date)
+        raw_measurements[m] = measurement_entry[date]
+
     meals = {
         meal.name: [
             {
@@ -32,22 +37,24 @@ def fetch_diary_entry(date, client):
         "totals": raw.totals,
         "meals": meals,
         "exercises": exercises,
+        "measurements": raw_measurements,
     }
-
-
-def fetch_measurement_entries(measurement, start_date, end_date, client):
-    return client.get_measurements(measurement, start_date, end_date)
 
 
 def save_diary_entry(db, diary_entry):
     original = diary_entry
+
+    # Delete existing diary entries and related
     existing = list(db["diary_entries"].rows_where("date = ?", [original["date"]]))
     if existing:
         existing_id = existing[0]["id"]
+        db["measurements"].delete_where("diary_entry = ?", [existing_id])
         db["goals"].delete_where("diary_entry = ?", [existing_id])
         db["exercise_entry_items"].delete_where("diary_entry = ?", [existing_id])
         db["food_entry_items"].delete_where("diary_entry = ?", [existing_id])
         db["diary_entries"].delete_where("id = ?", [existing_id])
+
+    # Save diary entry
     diary_entry = {
         "date": original["date"],
         "notes": original["notes"],
@@ -65,6 +72,8 @@ def save_diary_entry(db, diary_entry):
         )
         .last_pk
     )
+
+    # Save food items
     for meal, entries in original["meals"].items():
         for entry in entries:
             short_name = entry.get("short_name") or entry["name"].split(", ", 1)[0]
@@ -99,6 +108,7 @@ def save_diary_entry(db, diary_entry):
                 foreign_keys=[("diary_entry", "diary_entries")],
             )
 
+    # Save exercise items
     for exercise, entries in original["exercises"].items():
         for entry in entries:
             nutrition_information = {
@@ -125,6 +135,7 @@ def save_diary_entry(db, diary_entry):
                 foreign_keys=[("diary_entry", "diary_entries")],
             )
 
+    # Save goals
     nutrition_information = {k: v for k, v in original["goals"].items()}
     goals = {"diary_entry": diary_entry_id, **nutrition_information}
     db["goals"].insert(
@@ -139,20 +150,21 @@ def save_diary_entry(db, diary_entry):
         foreign_keys=[("diary_entry", "diary_entries")],
     )
 
-
-def save_measurement_entries(db, measurement_entries, measurement):
-    measurement_entries = [
-        {"measurement": measurement, "date": date, "value": entry}
-        for date, entry in measurement_entries.items()
+    # Save measurement items
+    measurement_entry_items = [
+        {"diary_entry": diary_entry_id, "name": m, "value": v}
+        for m, v in original["measurements"].items()
     ]
-    db["measurement_entries"].insert_all(
-        measurement_entries,
-        pk=("measurement", "date"),
+    db["measurement_entry_items"].insert_all(
+        measurement_entry_items,
+        pk="id",
         alter=True,
         replace=True,
         column_order=[
-            "measurement",
-            "date",
+            "id",
+            "diary_entry",
+            "name",
             "value",
         ],
+        foreign_keys=[("diary_entry", "diary_entries")],
     )

@@ -23,6 +23,7 @@ def test_tables(db):
         "diary_entries",
         "food_entry_items",
         "exercise_entry_items",
+        "measurement_entry_items",
         "goals",
     } == set(db.table_names())
     assert {
@@ -49,6 +50,14 @@ def test_tables(db):
             other_column="id",
         ),
     } == set(db["goals"].foreign_keys)
+    assert {
+        ForeignKey(
+            table="measurement_entry_items",
+            column="diary_entry",
+            other_table="diary_entries",
+            other_column="id",
+        ),
+    } == set(db["measurement_entry_items"].foreign_keys)
 
 
 def test_diary_entries(db):
@@ -143,3 +152,10 @@ def test_goals(db):
                 "sugar": 76.0,
             }
     ] == goal_rows
+
+
+def test_measurement_entry_items(db):
+    measurement_entry_item_rows = list(db["measurement_entry_items"].rows)
+    assert [
+        {"id": 1, "diary_entry": 1, "name": "Weight", "value": 77.3},
+    ] == measurement_entry_item_rows

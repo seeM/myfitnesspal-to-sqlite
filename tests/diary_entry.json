@@ -64,5 +64,8 @@
     "protein": 101.0,
     "sodium": 2300.0,
     "sugar": 76.0
+  },
+  "measurements": {
+    "Weight": 77.3
   }
 }
