@@ -105,7 +105,7 @@ VIEWS = {
         left join goals g on g.diary_entry = d.id
         left join (
             select d.date,
-                   sum(case when m.name = 'Weight' then value end) as weight
+                   avg(case when m.name = 'Weight' then value end) as weight
             from measurement_entry_items m
             left join diary_entries d on d.id = m.diary_entry
             group by d.date
